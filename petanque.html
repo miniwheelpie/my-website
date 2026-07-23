@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PÉTANQUE | Pei's Journey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --orange:#EA4A24;
+    --cream:#FFFDF3;
+    --brown:#4A2E1E;
+    --brown-soft:#6b4a34;
+    --blue-bg:#BFE3F7;
+    --green-bg:#E3EA84;
+    --pink-bg:#FADCE3;
+    --lightblue-bg:#C6E6F6;
+    --honor-pink:#F6C9CF;
+    --honor-pink-text:#D97A88;
+  }
+
+  /* 自訂字型：請把對應的字型檔放進 fonts/ 資料夾，檔名需與下面一致
+     （這兩款字型不是系統內建/Google Fonts，需要你自己提供字型檔） */
+  @font-face{
+    font-family:"Peace Sans";
+    src:url("fonts/PeaceSans.woff2") format("woff2"),
+        url("fonts/PeaceSans.woff") format("woff");
+    font-weight:900;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:"Klein Condensed";
+    src:url("fonts/KleinCondensed-Bold.woff2") format("woff2"),
+        url("fonts/KleinCondensed-Bold.woff") format("woff");
+    font-weight:700;
+    font-style:normal;
+    font-display:swap;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+    color:var(--brown);
+    background:var(--cream);
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:var(--blue-bg);
+    padding:90px 6vw 60px;
+    position:relative;
+    text-align:center;
+  }
+
+  .home-link{
+    position:absolute;
+    top:14px;
+    left:50%;
+    transform:translateX(-50%);
+    font-weight:700;
+    font-size:0.95rem;
+    letter-spacing:0.15em;
+    color:#F5F06B;
+    text-shadow:0 1px 2px rgba(0,0,0,0.15);
+    padding:6px 4px;
+    transition:opacity .2s ease;
+  }
+  .home-link:hover{ opacity:0.75; }
+
+  h1.title{
+    font-family:"Peace Sans","Anton", sans-serif;
+    font-size:clamp(3.2rem, 12vw, 8.5rem);
+    color:var(--orange);
+    font-weight:900;
+    letter-spacing:-0.02em;
+    line-height:0.9;
+    text-align:center;
+    margin:10px 0 14px;
+    text-transform:uppercase;
+  }
+
+  .hero-photo{
+    width:100%;
+    max-width:1300px;
+    margin:0 auto;
+    display:block;
+    border-radius:4px;
+    overflow:hidden;
+    background:#1c1c1c;
+    aspect-ratio:16/7.2;
+  }
+  .hero-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+  }
+  .hero-photo .placeholder{
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    color:#ddd;font-size:0.95rem;letter-spacing:0.05em;
+    background:repeating-linear-gradient(135deg,#222,#222 10px,#2a2a2a 10px,#2a2a2a 20px);
+  }
+
+  /* ---------- STATS ---------- */
+  .stats-section{
+    background:var(--green-bg);
+    padding:56px 6vw 64px;
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+
+  .stats-left{
+    display:flex;
+    gap:24px;
+    flex:1 1 320px;
+  }
+
+  .stats-left .stat-card{ flex:1 1 0; }
+
+  .stat-card{
+    background:var(--cream);
+    border-radius:20px;
+    padding:18px 32px;
+    flex:1 1 260px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.05);
+    display:flex;
+    flex-direction:column;
+    min-height:96px;
+  }
+
+  .stat-body{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  .stat-label{
+    font-size:0.95rem;
+    font-weight:700;
+    color:var(--brown-soft);
+    margin-bottom:10px;
+  }
+
+  .stat-value{
+    font-size:2.3rem;
+    font-weight:900;
+    color:var(--brown);
+  }
+
+  #ballAge{
+    font-size:1.5rem;
+    white-space:nowrap;
+  }
+
+  .stat-sub{
+    font-size:0.85rem;
+    font-weight:400;
+    color:var(--brown-soft);
+    margin-left:6px;
+  }
+
+  .stat-note{
+    font-size:0.68rem;
+    color:var(--brown-soft);
+    margin-top:4px;
+    white-space:nowrap;
+  }
+
+  .honor-card{
+    flex:2 1 420px;
+    max-width:100%;
+    min-width:0;
+    overflow:hidden;
+  }
+
+  .honor-grid{
+    display:grid;
+    grid-template-columns:repeat(8, minmax(0, 1fr));
+    gap:8px;
+    margin-top:14px;
+    justify-items:center;
+    width:100%;
+  }
+
+  .honor-item{
+    text-align:center;
+    width:100%;
+  }
+
+  .honor-circle{
+    width:100%;
+    max-width:46px;
+    aspect-ratio:1/1;
+    border-radius:50%;
+    background:var(--honor-pink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem;
+    font-weight:900;
+    color:var(--honor-pink-text);
+    margin:0 auto 6px;
+  }
+
+  .honor-circle.empty{
+    background:#F1EDE4;
+    color:transparent;
+  }
+
+  .honor-name{
+    font-size:0.68rem;
+    font-weight:700;
+    color:var(--brown-soft);
+  }
+
+  /* ---------- JOURNEY SECTION ---------- */
+  .journey-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:48px 6vw 8px;
+    background:var(--green-bg);
+  }
+
+  .journey-header h2{
+    font-family:"Klein Condensed","Oswald", sans-serif;
+    color:var(--orange);
+    font-size:2.1rem;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+
+  .journey-header .icon{ font-size:1.6rem; }
+
+  .timeline-wrap{
+    position:relative;
+    padding:0 0 100px;
+  }
+
+  .timeline-line{
+    position:absolute;
+    left:calc(6vw + 26px);
+    top:0;
+    bottom:60px;
+    width:3px;
+    background:var(--brown-soft);
+    opacity:0.7;
+    z-index:1;
+  }
+
+  .year-block{
+    position:relative;
+    padding:36px 6vw;
+  }
+
+  .year-block:first-child{ padding-top:56px; }
+
+  .entry{
+    position:relative;
+    display:flex;
+    gap:28px;
+    align-items:stretch;
+    margin-bottom:26px;
+    padding-left:70px;
+  }
+
+  .entry-dot{
+    position:absolute;
+    left:14px;
+    top:6px;
+    width:26px; height:26px;
+    border-radius:50%;
+    background:var(--cream);
+    border:3px solid var(--brown-soft);
+    z-index:2;
+  }
+
+  .entry-card{
+    background:var(--cream);
+    border-radius:20px;
+    padding:22px 28px;
+    flex:1 1 auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+  }
+
+  .entry-meta{
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--brown-soft);
+    display:flex;
+    gap:14px;
+  }
+
+  .entry-meta .tag{
+    text-transform:capitalize;
+  }
+
+  .entry-title{
+    font-size:1.05rem;
+    font-weight:700;
+    color:var(--brown);
+  }
+
+  .entry-text{
+    font-size:0.95rem;
+    line-height:1.7;
+    color:var(--brown);
+  }
+
+  .entry-photo{
+    width:220px;
+    flex:0 0 220px;
+    border-radius:16px;
+    overflow:hidden;
+    background:#1c1c1c;
+    aspect-ratio:1/0.85;
+    align-self:center;
+  }
+  .entry-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .entry-photo .placeholder{
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    color:#bbb;font-size:0.8rem;text-align:center;
+    background:repeating-linear-gradient(135deg,#222,#222 8px,#2a2a2a 8px,#2a2a2a 16px);
+  }
+
+  @media (max-width:640px){
+    .entry{ flex-direction:column; padding-left:56px; }
+    .entry-photo{ width:100%; flex:none; aspect-ratio:16/9; }
+    .timeline-line{ left:calc(6vw + 20px); }
+  }
+
+  @media (max-width:480px){
+    .stats-left{ flex-direction:column; }
+    .stat-card{ padding:16px 20px; }
+    #ballAge{ font-size:1.3rem; white-space:normal; }
+    .stat-note{ white-space:normal; }
+    .honor-grid{ grid-template-columns:repeat(4,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="home-link" href="index.html" id="homeLink">HOME</a>
+  <h1 class="title">Pétanque</h1>
+  <div class="hero-photo">
+    <div class="placeholder">請替換成你的主視覺照片（建議尺寸約 1300×580）</div>
+    <!-- 換成真的照片時改成： <img src="你的照片路徑.jpg" alt="主視覺照片"> -->
+  </div>
+</header>
+
+<section class="stats-section">
+  <div class="stats-left">
+    <div class="stat-card">
+      <div class="stat-label">球齡</div>
+      <div class="stat-body">
+        <div class="stat-value" id="ballAge">計算中...</div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">參賽次數</div>
+      <div class="stat-body">
+        <div class="stat-value" id="matchCount">–</div>
+        <div class="stat-note">包含個人/雙人/三人/射擊賽</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card honor-card">
+    <div class="stat-label">榮譽榜</div>
+    <div class="stat-body">
+      <div class="honor-grid" id="honorGrid"></div>
+    </div>
+  </div>
+</section>
+
+<div class="journey-header">
+  <span class="icon">🚩</span>
+  <h2>Pei's Pétanque Journey</h2>
+</div>
+
+<div class="timeline-wrap">
+  <div class="timeline-line"></div>
+  <div id="timelineContainer"></div>
+</div>
+
+<script>
+/* =========================================================
+   1) 比賽紀錄資料 —— 之後新增比賽只要在這個陣列裡加一筆即可，
+      球齡以外的所有統計數字都會自動重新計算
+   =========================================================
+   date        : "YYYY.MM" 格式
+   position    : "pointer" / "middle" / "shooter"
+   result      : "1st" | "2nd" | "3rd" | "Top4" | "Top8" | "Top16" | "Top32" | "ELIM" | null
+   title       : 這場比賽的標題（例如「台中混雙」），沒有就留空字串
+   description : 簡短心得
+   image       : 照片檔名/路徑（沒有圖就留空字串）
+   ========================================================= */
+const matchRecords = [
+  {
+    date: "2021.11",
+    position: "pointer",
+    result: "ELIM",
+    title: "",
+    description: "第一次參加滾球比賽，感覺像去玩xd。兩位隊友都很照顧我，也很用心指導！回家之後立志要好好練球，才能多打幾場比賽！",
+    image: ""
+  },
+  {
+    date: "2021.12",
+    position: "pointer",
+    result: "ELIM",
+    title: "",
+    description: "教練說我跟兩個冠軍妹妹一隊，她們都很厲害，聽他們的就對了！",
+    image: ""
+  },
+  {
+    date: "2022.01",
+    position: "pointer",
+    result: "ELIM",
+    title: "台中混雙",
+    description: "聽學姐說有比賽就要去打！於是在教練熱情邀約下一起去台中打比賽！跟傳說中頭城還有一個厲害的弟弟一隊，仁傑超罩啊！還有一局猛灌6分，心臟都快停了…",
+    image: ""
+  }
+];
+
+/* =========================================================
+   2) 球齡計算：從 2021/10/29 開始，即時算出 x年x月x天
+   ========================================================= */
+function calcBallAge(startDateStr){
+  const start = new Date(startDateStr);
+  const now = new Date();
+
+  let years = now.getFullYear() - start.getFullYear();
+  let months = now.getMonth() - start.getMonth();
+  let days = now.getDate() - start.getDate();
+
+  if(days < 0){
+    months -= 1;
+    const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+    days += prevMonth.getDate();
+  }
+  if(months < 0){
+    years -= 1;
+    months += 12;
+  }
+  return `${years}年${months}月${days}天`;
+}
+
+document.getElementById("ballAge").textContent = calcBallAge("2021-10-29");
+
+/* =========================================================
+   3) 參賽次數：直接讀取 matchRecords 筆數
+   ========================================================= */
+document.getElementById("matchCount").innerHTML =
+  `${matchRecords.length}<span class="stat-sub">場</span>`;
+
+/* =========================================================
+   4) 榮譽榜：統計每個名次出現次數，沒出現過就留白
+   ========================================================= */
+const honorOrder = ["1st","2nd","3rd","Top4","Top8","Top16","Top32","ELIM"];
+const honorCounts = {};
+honorOrder.forEach(k => honorCounts[k] = 0);
+matchRecords.forEach(r => {
+  if(r.result && honorCounts.hasOwnProperty(r.result)){
+    honorCounts[r.result] += 1;
+  }
+});
+
+const honorGrid = document.getElementById("honorGrid");
+honorOrder.forEach(key => {
+  const count = honorCounts[key];
+  const item = document.createElement("div");
+  item.className = "honor-item";
+  item.innerHTML = `
+    <div class="honor-circle ${count === 0 ? 'empty' : ''}">${count === 0 ? '' : count}</div>
+    <div class="honor-name">${key}</div>
+  `;
+  honorGrid.appendChild(item);
+});
+
+/* =========================================================
+   5) 時間軸：依年份分組來決定底色（不在畫面上顯示年份文字）
+      預設是黃綠色滿版；2022 年比賽改成粉色滿版
+      之後若某一年想改顏色，只要在 yearColorOverrides 裡加一筆
+   ========================================================= */
+const yearColorOverrides = {
+  "2022": "var(--pink-bg)",
+  "2023": "var(--lightblue-bg)",
+  "2024": "var(--green-bg)",
+  "2025": "var(--pink-bg)",
+  "2026": "var(--lightblue-bg)"
+};
+function getYearColor(year){
+  return yearColorOverrides[year] || "var(--green-bg)";
+}
+
+function groupByYear(records){
+  const groups = {};
+  records.forEach(r => {
+    const year = r.date.split(".")[0];
+    if(!groups[year]) groups[year] = [];
+    groups[year].push(r);
+  });
+  return groups;
+}
+
+const grouped = groupByYear(matchRecords);
+const container = document.getElementById("timelineContainer");
+
+Object.keys(grouped).sort().forEach(year => {
+  const yearBlock = document.createElement("div");
+  yearBlock.className = "year-block";
+  yearBlock.style.background = getYearColor(year);
+
+  grouped[year].forEach(r => {
+    const entry = document.createElement("div");
+    entry.className = "entry";
+
+    const photoHtml = r.image
+      ? `<img src="${r.image}" alt="${r.date} 比賽照片">`
+      : `<div class="placeholder">照片<br>（替換成你的照片）</div>`;
+
+    entry.innerHTML = `
+      <div class="entry-dot"></div>
+      <div class="entry-card">
+        <div class="entry-meta">
+          <span>${r.date}</span>
+          <span class="tag">${r.position}</span>
+          <span class="tag">${r.result || ""}</span>
+        </div>
+        ${r.title ? `<div class="entry-title">${r.title}</div>` : ""}
+        <div class="entry-text">${r.description}</div>
+      </div>
+      <div class="entry-photo">${photoHtml}</div>
+    `;
+    yearBlock.appendChild(entry);
+  });
+
+  container.appendChild(yearBlock);
+});
+
+/* =========================================================
+   6) HOME 連結：改成你首頁的實際路徑或網址
+   ========================================================= */
+document.getElementById("homeLink").setAttribute("href", "index.html");
+// 例如首頁在同資料夾： "index.html"
+// 或首頁是外部網址： "https://your-site.com/"
+</script>
+
+</body>
+</html>
