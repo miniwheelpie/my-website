@@ -322,7 +322,12 @@
     aspect-ratio:1/0.85;
     align-self:center;
   }
-  .entry-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .entry-photo img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    cursor:zoom-in;
+    transition:transform .2s ease;
+  }
+  .entry-photo img:hover{ transform:scale(1.03); }
   .entry-photo .placeholder{
     width:100%;height:100%;
     display:flex;align-items:center;justify-content:center;
@@ -342,6 +347,63 @@
     #ballAge{ font-size:1.3rem; white-space:normal; }
     .stat-note{ white-space:normal; }
     .honor-grid{ grid-template-columns:repeat(4,1fr); }
+  }
+
+  /* ---------- 回到頂端按鈕 ---------- */
+  #backToTopBtn{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    background:var(--orange);
+    color:#fff;
+    border:none;
+    font-size:1.3rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(10px);
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:50;
+  }
+  #backToTopBtn.visible{
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0);
+  }
+  #backToTopBtn:hover{ opacity:0.85; }
+
+  /* ---------- 照片放大檢視 ---------- */
+  #photoLightbox{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:5vw;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:100;
+    cursor:zoom-out;
+  }
+  #photoLightbox.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  #photoLightbox img{
+    max-width:50vw;
+    max-height:50vh;
+    width:auto;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.5);
   }
 </style>
 </head>
@@ -390,6 +452,14 @@
 <div class="timeline-wrap">
   <div class="timeline-line"></div>
   <div id="timelineContainer"></div>
+</div>
+
+<!-- 回到頁面最上方按鈕 -->
+<button id="backToTopBtn" title="回到頂端" aria-label="回到頂端">↑</button>
+
+<!-- 照片放大檢視 -->
+<div id="photoLightbox">
+  <img id="photoLightboxImg" src="" alt="放大檢視">
 </div>
 
 <script>
@@ -561,6 +631,56 @@ Object.keys(grouped).sort().forEach(year => {
 document.getElementById("homeLink").setAttribute("href", "index.html");
 // 例如首頁在同資料夾： "index.html"
 // 或首頁是外部網址： "https://your-site.com/"
+
+/* =========================================================
+   7) 回到頁面最上方按鈕
+      往下捲動超過一定距離才顯示，按下後平滑捲回最上方
+   ========================================================= */
+const backToTopBtn = document.getElementById("backToTopBtn");
+
+window.addEventListener("scroll", () => {
+  if(window.scrollY > 400){
+    backToTopBtn.classList.add("visible");
+  } else {
+    backToTopBtn.classList.remove("visible");
+  }
+});
+
+backToTopBtn.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+/* =========================================================
+   8) 比賽紀錄照片點擊放大（Lightbox）
+      點照片放大顯示，點畫面任一處關閉
+   ========================================================= */
+const photoLightbox = document.getElementById("photoLightbox");
+const photoLightboxImg = document.getElementById("photoLightboxImg");
+
+// 用事件委派：因為比賽紀錄的照片是用 JS 動態產生的，
+// 直接把點擊監聽掛在 timelineContainer 上，點到裡面的 <img> 才觸發
+container.addEventListener("click", (e) => {
+  const target = e.target;
+  if(target.tagName === "IMG" && target.closest(".entry-photo")){
+    photoLightboxImg.src = target.src;
+    photoLightboxImg.alt = target.alt;
+    photoLightbox.classList.add("active");
+  }
+});
+
+// 點畫面任何地方（包含放大的照片本身）都關閉
+photoLightbox.addEventListener("click", () => {
+  photoLightbox.classList.remove("active");
+  photoLightboxImg.src = "";
+});
+
+// 按 ESC 也可以關閉
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape" && photoLightbox.classList.contains("active")){
+    photoLightbox.classList.remove("active");
+    photoLightboxImg.src = "";
+  }
+});
 </script>
 
 </body>
