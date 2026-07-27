@@ -626,7 +626,7 @@ const matchRecords = [
     result: "1st",
     title: "🏆中華民國大專校院法式滾球錦標賽 個人射擊賽",
     description: "OMG!第一次打射擊賽就不小心打到第一名，unbelievable......謝謝我的冠軍教練＆冠軍排球員亭妤愛笑佳蓁！開心～",
-    image: "images/IMG_4535.JPG"
+    image: "images/IIMG_4535.JPG"
   },
 {
     date: "2023.03",
@@ -1006,7 +1006,7 @@ const matchRecords = [
     description: "微醺布布沒吃到布布但是打進8強，哇哈哈我們真是太厲害啦！謝謝莉芳找我來打比賽～黑皮！",
     image: "images/IMG_7685.JPG"
   },
-  {
+{
     date: "2026.06",
     position: "pointer",
     result: "Top8",
@@ -1109,6 +1109,15 @@ function groupByYear(records){
 const grouped = groupByYear(matchRecords);
 const container = document.getElementById("timelineContainer");
 
+// 把文字裡的 < > & 等符號轉成安全的顯示格式，
+// 避免心得裡打了「><」「<3」這種表情符號或符號時，把畫面排版弄壞
+function escapeHtml(str){
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
 Object.keys(grouped).sort().forEach(year => {
   const yearBlock = document.createElement("div");
   yearBlock.className = "year-block";
@@ -1119,19 +1128,19 @@ Object.keys(grouped).sort().forEach(year => {
     entry.className = "entry";
 
     const photoHtml = r.image
-      ? `<img src="${r.image}" alt="${r.date} 比賽照片">`
+      ? `<img src="${r.image}" alt="${escapeHtml(r.date)} 比賽照片">`
       : `<div class="placeholder">照片<br>（替換成你的照片）</div>`;
 
     entry.innerHTML = `
       <div class="entry-dot"></div>
       <div class="entry-card">
         <div class="entry-meta">
-          <span>${r.date}</span>
-          <span class="tag">${r.position}</span>
-          <span class="tag">${r.result || ""}</span>
+          <span>${escapeHtml(r.date)}</span>
+          <span class="tag">${escapeHtml(r.position)}</span>
+          <span class="tag">${escapeHtml(r.result || "")}</span>
         </div>
-        ${r.title ? `<div class="entry-title">${r.title}</div>` : ""}
-        <div class="entry-text">${r.description}</div>
+        ${r.title ? `<div class="entry-title">${escapeHtml(r.title)}</div>` : ""}
+        <div class="entry-text">${escapeHtml(r.description)}</div>
       </div>
       <div class="entry-photo">${photoHtml}</div>
     `;
@@ -1140,6 +1149,26 @@ Object.keys(grouped).sort().forEach(year => {
 
   container.appendChild(yearBlock);
 });
+
+// 讓左側時間軸的線只延伸到「最後一筆紀錄」的圓點為止，
+// 不會在最後一筆之後繼續往下拖出一截空線
+function adjustTimelineLineHeight(){
+  const lineEl = document.querySelector(".timeline-line");
+  const wrap = document.querySelector(".timeline-wrap");
+  const dots = container.querySelectorAll(".entry-dot");
+  if(!lineEl || !wrap || dots.length === 0) return;
+
+  const lastDot = dots[dots.length - 1];
+  const wrapTop = wrap.getBoundingClientRect().top;
+  const dotRect = lastDot.getBoundingClientRect();
+  const height = (dotRect.top - wrapTop) + (dotRect.height / 2);
+
+  lineEl.style.bottom = "auto";
+  lineEl.style.height = height + "px";
+}
+
+adjustTimelineLineHeight();
+window.addEventListener("resize", adjustTimelineLineHeight);
 
 /* =========================================================
    6) HOME 連結：改成你首頁的實際路徑或網址
