@@ -58,7 +58,7 @@ body:has(.detail-page:target) #home{ display: none; }
 .hero-media{ position: relative; overflow: hidden; }
 .hero-sky{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); padding: 40px 24px 0; min-height: 260px; overflow: hidden; }
 .cloud{ position: absolute; opacity: 0.95; }
-.hero-banner{ position: relative; z-index: 3; background: var(--red); margin: 40px auto 0; max-width: 640px; padding: 28px 20px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.08); }
+.hero-banner{ position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; background: var(--red); width: 80%; max-width: 640px; padding: 28px 20px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.08); }
 .hero-banner h1{ margin: 0; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(1.1rem, 6.2vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; white-space: nowrap; }
 .hills{ display: block; width: 100%; height: auto; margin-top: -2px; }
 
@@ -191,6 +191,19 @@ body:has(.detail-page:target) #home{ display: none; }
 .lightbox-arrow.prev{ left: 20px; }
 .lightbox-arrow.next{ right: 20px; }
 
+/* ---------- 回到頂端按鈕（固定在右下角，所有頁面共用） ---------- */
+.back-to-top{
+  position: fixed; right: 24px; bottom: 24px; z-index: 50;
+  width: 48px; height: 48px; border-radius: 50%; border: none;
+  background: var(--red); color: var(--white); font-size: 1.3rem;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(59,42,29,0.25); transition: background 0.15s ease;
+}
+.back-to-top:hover{ background: var(--red-dark); }
+@media (max-width: 480px){
+  .back-to-top{ right: 16px; bottom: 16px; width: 42px; height: 42px; font-size: 1.1rem; }
+}
+
 @media (max-width: 480px){
   .gallery-slot{ width: 130px; height: 165px; }
 }
@@ -246,12 +259,12 @@ body:has(.detail-page:target) #home{ display: none; }
             <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
             <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
           </svg>
-          <div class="hero-banner"><h1>The Traveling PEI</h1></div>
         </div>
         <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
           <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
         </svg>
+        <div class="hero-banner"><h1>The Traveling PEI</h1></div>
       </div>
     </section>
 
@@ -502,6 +515,9 @@ body:has(.detail-page:target) #home{ display: none; }
   <!-- =========================================================
        共用的照片放大檢視（所有頁面的照片列都共用這一個）
        ========================================================= -->
+  <!-- 回到頂端按鈕：固定在右下角，不管目前顯示的是首頁還是哪一個旅行子頁都會出現 -->
+  <button class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})" aria-label="回到頂端">&uarr;</button>
+
   <div id="lightbox" class="lightbox" onclick="if(event.target===this) closeLightbox()">
     <button class="lightbox-close" onclick="closeLightbox()" aria-label="關閉">&times;</button>
     <button class="lightbox-arrow prev" onclick="lightboxStep(-1)" aria-label="上一張">&lsaquo;</button>
