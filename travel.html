@@ -6,127 +6,301 @@
 <title>The Traveling PEI — 旅遊紀錄</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
+<style>
+:root{
+  --cream:      #FDF1E2;
+  --red:        #E23B2E;
+  --red-dark:   #C22D22;
+  --yellow:     #FBD97E;
+  --brown:      #3B2A1D;
+  --brown-soft: #6B5744;
+  --sky-top:    #BFE6FB;
+  --sky-bottom: #EAF8FE;
+  --hill-dark:  #8FAF19;
+  --hill-light: #C6DD6E;
+  --white:      #FFFDF8;
+  --font-display: 'Anton', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --radius: 18px;
+  --max-width: 720px;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{ margin: 0; font-family: var(--font-body); color: var(--brown); background: var(--yellow); }
+a{ text-decoration: none; color: inherit; }
+img{ max-width: 100%; display: block; }
+
+/* 這裡是「單一檔案模擬多頁面」的關鍵：
+   每個 .page 預設是隱藏的，只有網址 #後面 對到哪個 id，
+   那個區塊才會顯示；點卡片就是換 #id，感覺像換頁，
+   但其實整個網站都在同一個 travel.html 檔案裡。 */
+.page{ display: none; }
+#home{ display: block; }
+.detail-page:target{ display: block !important; }
+body:has(.detail-page:target) #home{ display: none; }
+
+/* ---------- Top bar ---------- */
+.topbar{ background: var(--cream); text-align: center; padding: 14px 0; }
+.topbar a{ color: var(--red); font-family: var(--font-body); font-weight: 700; letter-spacing: 2px; font-size: 0.95rem; text-transform: uppercase; transition: opacity .15s ease; }
+.topbar a:hover{ opacity: .7; }
+
+/* ---------- Hero ---------- */
+.hero{ position: relative; overflow: hidden; background: var(--cream); }
+.hero-sky{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); padding: 40px 24px 0; min-height: 260px; overflow: hidden; }
+.cloud{ position: absolute; opacity: 0.95; }
+.hero-banner{ position: relative; z-index: 3; background: var(--red); margin: 40px auto 0; max-width: 640px; padding: 28px 20px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.08); }
+.hero-banner h1{ margin: 0; font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: clamp(2.2rem, 8vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; }
+.hills{ display: block; width: 100%; height: auto; margin-top: -2px; }
+
+/* ---------- Travel log section ---------- */
+.log-section{ background: var(--yellow); padding: 56px 24px 80px; }
+.log-inner{ max-width: var(--max-width); margin: 0 auto; }
+.eyebrow{ font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; text-transform: uppercase; color: var(--brown); margin: 0 0 8px; }
+.log-title{ font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 7vw, 3rem); margin: 0 0 12px; color: var(--brown); line-height: 1.05; }
+.log-subtitle{ font-size: 0.85rem; font-weight: 500; color: var(--brown-soft); margin: 0 0 48px; }
+
+/* ---------- Timeline ---------- */
+.timeline{ position: relative; padding-left: 70px; }
+.timeline-year{ position: absolute; left: 0; top: 0; width: 62px; height: 62px; border-radius: 50%; background: var(--red); color: var(--white); font-family: var(--font-display); font-size: 1.15rem; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
+.timeline-line{ position: absolute; left: 31px; top: 0; bottom: 0; width: 2px; background: var(--red); opacity: 0.55; }
+.trip-list{ display: flex; flex-direction: column; gap: 40px; }
+
+/* ---------- Trip card ---------- */
+.trip-card{ display: block; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 14px rgba(59,42,29,0.10); transition: transform .18s ease, box-shadow .18s ease; }
+.trip-card:hover{ transform: translateY(-4px); box-shadow: 0 10px 24px rgba(59,42,29,0.16); }
+.trip-card:focus-visible{ outline: 3px solid var(--red-dark); outline-offset: 3px; }
+.trip-thumb{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); aspect-ratio: 16 / 9; overflow: hidden; }
+.trip-thumb .cloud{ opacity: 0.9; }
+.trip-thumb .hills{ position: absolute; bottom: 0; left: 0; margin-top: 0; }
+.trip-info{ padding: 22px 24px 26px; }
+.trip-info h2{ font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; font-size: 1.7rem; margin: 0 0 8px; color: var(--brown); }
+.trip-meta{ font-size: 0.9rem; color: var(--brown-soft); margin: 0 0 14px; display: flex; align-items: center; gap: 10px; }
+.trip-meta .divider{ opacity: 0.5; }
+.read-more{ color: var(--red); font-weight: 600; font-size: 0.9rem; }
+
+/* ---------- Trip detail page ---------- */
+.detail-section{ background: var(--yellow); padding: 48px 24px 80px; }
+.detail-inner{ max-width: var(--max-width); margin: 0 auto; }
+.back-link{ display: inline-block; margin-bottom: 24px; font-weight: 600; color: var(--red); font-size: 0.9rem; }
+.detail-title{ font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 7vw, 2.8rem); margin: 0 0 10px; color: var(--brown); line-height: 1.05; }
+.detail-meta{ font-size: 0.95rem; color: var(--brown-soft); margin: 0 0 32px; }
+.detail-hero-img{ border-radius: var(--radius); overflow: hidden; margin-bottom: 32px; box-shadow: 0 4px 14px rgba(59,42,29,0.10); }
+.detail-body{ background: var(--white); border-radius: var(--radius); padding: 32px; line-height: 1.8; box-shadow: 0 4px 14px rgba(59,42,29,0.10); }
+.detail-body p{ margin: 0 0 18px; }
+.detail-body h3{ font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; color: var(--brown); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px){
+  .timeline{ padding-left: 56px; }
+  .timeline-year{ width: 50px; height: 50px; font-size: 0.9rem; }
+  .timeline-line{ left: 25px; }
+  .trip-info{ padding: 18px 18px 22px; }
+  .detail-body{ padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .trip-card{ transition: none; }
+}
+</style>
 </head>
 <body>
 
-  <!-- =========================================================
-       TOP BAR
-       這個檔案 travel.html 跟你的主網站 index.html 放在同一層
-       （就像 petanque.html 一樣），所以 HOME 直接連到 index.html。
-       ========================================================= -->
+  <!-- 這個檔案跟你的主網站 index.html 放在同一層（就像 petanque.html 一樣），
+       所以 HOME 直接連到 index.html。 -->
   <header class="topbar">
     <a href="index.html">Home</a>
   </header>
 
   <!-- =========================================================
-       HERO
+       首頁列表（travel.html#home，預設顯示）
        ========================================================= -->
-  <section class="hero">
-    <div class="hero-sky">
-      <svg class="cloud" style="top:20px; left:8%; width:150px;" viewBox="0 0 150 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="45" cy="45" rx="45" ry="24" fill="#fff"/>
-        <ellipse cx="90" cy="30" rx="35" ry="30" fill="#fff"/>
-        <ellipse cx="110" cy="48" rx="30" ry="18" fill="#fff"/>
-      </svg>
-      <svg class="cloud" style="top:5px; left:38%; width:220px;" viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="70" cy="60" rx="65" ry="34" fill="#fff"/>
-        <ellipse cx="130" cy="40" rx="55" ry="42" fill="#fff"/>
-        <ellipse cx="165" cy="65" rx="45" ry="26" fill="#fff"/>
-      </svg>
-      <svg class="cloud" style="top:15px; right:4%; width:110px;" viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
-        <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
-      </svg>
+  <div id="home" class="page">
 
-      <div class="hero-banner">
-        <h1>The Traveling PEI</h1>
+    <section class="hero">
+      <div class="hero-sky">
+        <svg class="cloud" style="top:20px; left:8%; width:150px;" viewBox="0 0 150 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="45" cy="45" rx="45" ry="24" fill="#fff"/>
+          <ellipse cx="90" cy="30" rx="35" ry="30" fill="#fff"/>
+          <ellipse cx="110" cy="48" rx="30" ry="18" fill="#fff"/>
+        </svg>
+        <svg class="cloud" style="top:5px; left:38%; width:220px;" viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="70" cy="60" rx="65" ry="34" fill="#fff"/>
+          <ellipse cx="130" cy="40" rx="55" ry="42" fill="#fff"/>
+          <ellipse cx="165" cy="65" rx="45" ry="26" fill="#fff"/>
+        </svg>
+        <svg class="cloud" style="top:15px; right:4%; width:110px;" viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
+          <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
+        </svg>
+        <div class="hero-banner"><h1>The Traveling PEI</h1></div>
       </div>
-    </div>
+      <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+        <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+      </svg>
+    </section>
 
-    <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
-      <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
-    </svg>
-  </section>
+    <section class="log-section">
+      <div class="log-inner">
+        <p class="eyebrow">Travel Log</p>
+        <h2 class="log-title">The Traveling PEI</h2>
+        <p class="log-subtitle">A collection of memories from around the world.</p>
 
-  <!-- =========================================================
-       TRAVEL LOG
-       ========================================================= -->
-  <section class="log-section">
-    <div class="log-inner">
-      <p class="eyebrow">Travel Log</p>
-      <h2 class="log-title">The Traveling PEI</h2>
-      <p class="log-subtitle">A collection of memories from around the world.</p>
+        <div class="timeline">
+          <div class="timeline-line"></div>
+          <div class="timeline-year">2026</div>
 
-      <div class="timeline">
-        <div class="timeline-line"></div>
-        <div class="timeline-year">2026</div>
+          <div class="trip-list">
 
-        <div class="trip-list">
+            <!-- 點這張卡片會跳到下面 id="trip-singapore" 那個區塊 -->
+            <a class="trip-card" href="#trip-singapore">
+              <div class="trip-thumb">
+                <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
+                  <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
+                </svg>
+                <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
+                  <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
+                </svg>
+                <svg class="cloud" style="top:12px; right:6%; width:50px;" viewBox="0 0 50 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="16" cy="16" rx="16" ry="8" fill="#fff"/>
+                  <ellipse cx="32" cy="10" rx="12" ry="10" fill="#fff"/>
+                </svg>
+                <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+                  <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+                </svg>
+              </div>
+              <div class="trip-info">
+                <h2>Singapore</h2>
+                <p class="trip-meta">
+                  <span>w/ 小畢 &amp; 曹小方</span>
+                  <span class="divider">|</span>
+                  <span>4 days</span>
+                </p>
+                <span class="read-more">read more</span>
+              </div>
+            </a>
 
-          <!-- ---------- Trip card: Singapore ---------- -->
-          <a class="trip-card" href="trips/singapore.html">
-            <div class="trip-thumb">
-              <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
-                <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
-              </svg>
-              <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
-                <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
-              </svg>
-              <svg class="cloud" style="top:12px; right:6%; width:50px;" viewBox="0 0 50 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="16" cy="16" rx="16" ry="8" fill="#fff"/>
-                <ellipse cx="32" cy="10" rx="12" ry="10" fill="#fff"/>
-              </svg>
-              <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
-                <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
-              </svg>
-            </div>
-            <div class="trip-info">
-              <h2>Singapore</h2>
-              <p class="trip-meta">
-                <span>w/ 小畢 &amp; 曹小方</span>
-                <span class="divider">|</span>
-                <span>4 days</span>
-              </p>
-              <span class="read-more">read more</span>
-            </div>
-          </a>
+            <!-- ---------- 範本卡片：複製這個區塊來新增下一筆旅行紀錄 ----------
+                 1. 把 href="#trip-next" 改成新的名字，例如 href="#trip-tokyo"
+                 2. 往下複製一份 id="trip-next" 的 <div class="page detail-page">
+                    區塊，把 id 也改成一樣的名字（例如 id="trip-tokyo"）
+                 3. 把標題、meta、內文換成新的內容
+            ---------------------------------------------------------------- -->
+            <a class="trip-card" href="#trip-next">
+              <div class="trip-thumb">
+                <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
+                  <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
+                </svg>
+                <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
+                  <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
+                </svg>
+                <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+                  <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+                </svg>
+              </div>
+              <div class="trip-info">
+                <h2>下一個目的地</h2>
+                <p class="trip-meta">
+                  <span>w/ 旅伴姓名</span>
+                  <span class="divider">|</span>
+                  <span>N days</span>
+                </p>
+                <span class="read-more">read more</span>
+              </div>
+            </a>
 
-          <!-- ---------- Trip card template: 複製這個區塊來新增下一筆旅行紀錄 ---------- -->
-          <a class="trip-card" href="trips/_template.html">
-            <div class="trip-thumb">
-              <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
-                <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
-              </svg>
-              <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
-                <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
-              </svg>
-              <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
-                <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
-              </svg>
-            </div>
-            <div class="trip-info">
-              <h2>下一個目的地</h2>
-              <p class="trip-meta">
-                <span>w/ 旅伴姓名</span>
-                <span class="divider">|</span>
-                <span>N days</span>
-              </p>
-              <span class="read-more">read more</span>
-            </div>
-          </a>
-
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </div>
+
+  <!-- =========================================================
+       子頁面：Singapore（travel.html#trip-singapore）
+       ========================================================= -->
+  <div id="trip-singapore" class="page detail-page">
+    <section class="detail-section">
+      <div class="detail-inner">
+        <a class="back-link" href="#home">&larr; back to travel log</a>
+
+        <h1 class="detail-title">Singapore</h1>
+        <p class="detail-meta">w/ 小畢 &amp; 曹小方 &nbsp;|&nbsp; 4 days &nbsp;|&nbsp; 2026</p>
+
+        <div class="detail-hero-img">
+          <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1200" height="500" fill="url(#sky1)"/>
+            <defs>
+              <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#BFE6FB"/>
+                <stop offset="100%" stop-color="#EAF8FE"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="180" cy="120" rx="90" ry="45" fill="#fff"/>
+            <ellipse cx="260" cy="90" rx="70" ry="55" fill="#fff"/>
+            <ellipse cx="900" cy="100" rx="100" ry="50" fill="#fff"/>
+            <path d="M0,300 C300,220 500,360 750,290 C950,230 1080,320 1200,250 L1200,500 L0,500 Z" fill="#C6DD6E"/>
+            <path d="M0,360 C260,280 480,420 720,340 C920,280 1060,400 1200,340 L1200,500 L0,500 Z" fill="#8FAF19"/>
+          </svg>
+        </div>
+
+        <div class="detail-body">
+          <p>
+            在這裡寫下這趟新加坡旅程的故事——去了哪些地方、吃了什麼、
+            和誰一起、有什麼難忘的瞬間。
+          </p>
+          <h3>Day 1</h3>
+          <p>抵達樟宜機場，入住飯店，晚上到濱海灣花園散步看燈光秀。</p>
+          <h3>Day 2</h3>
+          <p>聖淘沙一日遊。</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- =========================================================
+       子頁面範本：下一個目的地（travel.html#trip-next）
+       複製這一整塊 <div id="trip-next" ...>...</div>，
+       把 id 換成新名字，內容改掉，就是新增一筆旅行紀錄。
+       ========================================================= -->
+  <div id="trip-next" class="page detail-page">
+    <section class="detail-section">
+      <div class="detail-inner">
+        <a class="back-link" href="#home">&larr; back to travel log</a>
+
+        <h1 class="detail-title">目的地名稱</h1>
+        <p class="detail-meta">w/ 旅伴姓名 &nbsp;|&nbsp; N days &nbsp;|&nbsp; 年份</p>
+
+        <div class="detail-hero-img">
+          <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
+            <rect width="1200" height="500" fill="url(#sky2)"/>
+            <defs>
+              <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#BFE6FB"/>
+                <stop offset="100%" stop-color="#EAF8FE"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="180" cy="120" rx="90" ry="45" fill="#fff"/>
+            <ellipse cx="260" cy="90" rx="70" ry="55" fill="#fff"/>
+            <ellipse cx="900" cy="100" rx="100" ry="50" fill="#fff"/>
+            <path d="M0,300 C300,220 500,360 750,290 C950,230 1080,320 1200,250 L1200,500 L0,500 Z" fill="#C6DD6E"/>
+            <path d="M0,360 C260,280 480,420 720,340 C920,280 1060,400 1200,340 L1200,500 L0,500 Z" fill="#8FAF19"/>
+          </svg>
+        </div>
+
+        <div class="detail-body">
+          <p>在這裡寫下這趟旅程的故事……</p>
+        </div>
+      </div>
+    </section>
+  </div>
 
 </body>
 </html>
