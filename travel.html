@@ -42,7 +42,7 @@ body:has(.detail-page:target) #home{ display: none; }
 
 /* ---------- Top bar ---------- */
 .topbar{ background: var(--cream); text-align: center; padding: 14px 0; }
-.topbar a{ color: var(--red); font-family: var(--font-body); font-weight: 700; letter-spacing: 2px; font-size: 0.95rem; text-transform: uppercase; transition: opacity .15s ease; }
+.topbar a{ color: var(--red); font-family: var(--font-body); font-weight: 700; letter-spacing: 2px; font-size: 0.95rem; text-transform: uppercase; text-decoration: none; transition: opacity .15s ease; }
 .topbar a:hover{ opacity: .7; }
 
 /* ---------- 照片區塊 ----------
@@ -53,11 +53,12 @@ body:has(.detail-page:target) #home{ display: none; }
 .photo-slot{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 
 /* ---------- Hero ---------- */
-.hero{ position: relative; overflow: hidden; background: var(--cream); }
+.hero{ position: relative; overflow: hidden; background: var(--cream); padding: 20px; }
+.hero-media{ position: relative; overflow: hidden; }
 .hero-sky{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); padding: 40px 24px 0; min-height: 260px; overflow: hidden; }
 .cloud{ position: absolute; opacity: 0.95; }
 .hero-banner{ position: relative; z-index: 3; background: var(--red); margin: 40px auto 0; max-width: 640px; padding: 28px 20px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.08); }
-.hero-banner h1{ margin: 0; font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: clamp(1.1rem, 6.2vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; white-space: nowrap; }
+.hero-banner h1{ margin: 0; font-family: var(--font-display); text-transform: uppercase; font-size: clamp(1.1rem, 6.2vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; white-space: nowrap; }
 .hills{ display: block; width: 100%; height: auto; margin-top: -2px; }
 
 /* ---------- Travel log section ---------- */
@@ -125,29 +126,33 @@ body:has(.detail-page:target) #home{ display: none; }
   <div id="home" class="page">
 
     <section class="hero">
-      <div class="hero-sky">
-        <svg class="cloud" style="top:20px; left:8%; width:150px;" viewBox="0 0 150 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="45" cy="45" rx="45" ry="24" fill="#fff"/>
-          <ellipse cx="90" cy="30" rx="35" ry="30" fill="#fff"/>
-          <ellipse cx="110" cy="48" rx="30" ry="18" fill="#fff"/>
-        </svg>
-        <svg class="cloud" style="top:5px; left:38%; width:220px;" viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="70" cy="60" rx="65" ry="34" fill="#fff"/>
-          <ellipse cx="130" cy="40" rx="55" ry="42" fill="#fff"/>
-          <ellipse cx="165" cy="65" rx="45" ry="26" fill="#fff"/>
-        </svg>
-        <svg class="cloud" style="top:15px; right:4%; width:110px;" viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
-          <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
-        </svg>
+      <div class="hero-media">
         <img class="photo-slot" src="photos/hero-cover.jpg" alt="封面照片" onerror="this.style.display='none'">
-        <div class="hero-banner"><h1>The Traveling PEI</h1></div>
+        <div class="hero-sky">
+          <svg class="cloud" style="top:20px; left:8%; width:150px;" viewBox="0 0 150 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="45" cy="45" rx="45" ry="24" fill="#fff"/>
+            <ellipse cx="90" cy="30" rx="35" ry="30" fill="#fff"/>
+            <ellipse cx="110" cy="48" rx="30" ry="18" fill="#fff"/>
+          </svg>
+          <svg class="cloud" style="top:5px; left:38%; width:220px;" viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="70" cy="60" rx="65" ry="34" fill="#fff"/>
+            <ellipse cx="130" cy="40" rx="55" ry="42" fill="#fff"/>
+            <ellipse cx="165" cy="65" rx="45" ry="26" fill="#fff"/>
+          </svg>
+          <svg class="cloud" style="top:15px; right:4%; width:110px;" viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
+            <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
+          </svg>
+          <div class="hero-banner"><h1>The Traveling PEI</h1></div>
+        </div>
+        <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+          <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+        </svg>
       </div>
-      <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
-        <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
-      </svg>
     </section>
+
+
 
     <section class="log-section">
       <div class="log-inner">
