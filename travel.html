@@ -45,12 +45,19 @@ body:has(.detail-page:target) #home{ display: none; }
 .topbar a{ color: var(--red); font-family: var(--font-body); font-weight: 700; letter-spacing: 2px; font-size: 0.95rem; text-transform: uppercase; transition: opacity .15s ease; }
 .topbar a:hover{ opacity: .7; }
 
+/* ---------- 照片區塊 ----------
+   這些位置預留給你之後放照片。img 的 src 先留一個不存在的檔名，
+   在你還沒放照片、圖片載入失敗時會自動隱藏（onerror），
+   底下的天空/雲朵/山丘插畫就會照常顯示當作預設畫面；
+   等你把 src 換成真的照片路徑，插畫就會被照片蓋過去。 */
+.photo-slot{ position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+
 /* ---------- Hero ---------- */
 .hero{ position: relative; overflow: hidden; background: var(--cream); }
 .hero-sky{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); padding: 40px 24px 0; min-height: 260px; overflow: hidden; }
 .cloud{ position: absolute; opacity: 0.95; }
 .hero-banner{ position: relative; z-index: 3; background: var(--red); margin: 40px auto 0; max-width: 640px; padding: 28px 20px; text-align: center; box-shadow: 0 6px 0 rgba(0,0,0,0.08); }
-.hero-banner h1{ margin: 0; font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: clamp(2.2rem, 8vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; }
+.hero-banner h1{ margin: 0; font-family: 'Archivo Black', sans-serif; text-transform: uppercase; font-size: clamp(1.1rem, 6.2vw, 3.6rem); color: var(--yellow); letter-spacing: 0.5px; line-height: 1.05; white-space: nowrap; }
 .hills{ display: block; width: 100%; height: auto; margin-top: -2px; }
 
 /* ---------- Travel log section ---------- */
@@ -70,7 +77,7 @@ body:has(.detail-page:target) #home{ display: none; }
 .trip-card{ display: block; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 14px rgba(59,42,29,0.10); transition: transform .18s ease, box-shadow .18s ease; }
 .trip-card:hover{ transform: translateY(-4px); box-shadow: 0 10px 24px rgba(59,42,29,0.16); }
 .trip-card:focus-visible{ outline: 3px solid var(--red-dark); outline-offset: 3px; }
-.trip-thumb{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); aspect-ratio: 16 / 9; overflow: hidden; }
+.trip-thumb{ position: relative; background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%); aspect-ratio: 3 / 1; overflow: hidden; }
 .trip-thumb .cloud{ opacity: 0.9; }
 .trip-thumb .hills{ position: absolute; bottom: 0; left: 0; margin-top: 0; }
 .trip-info{ padding: 22px 24px 26px; }
@@ -85,7 +92,7 @@ body:has(.detail-page:target) #home{ display: none; }
 .back-link{ display: inline-block; margin-bottom: 24px; font-weight: 600; color: var(--red); font-size: 0.9rem; }
 .detail-title{ font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 7vw, 2.8rem); margin: 0 0 10px; color: var(--brown); line-height: 1.05; }
 .detail-meta{ font-size: 0.95rem; color: var(--brown-soft); margin: 0 0 32px; }
-.detail-hero-img{ border-radius: var(--radius); overflow: hidden; margin-bottom: 32px; box-shadow: 0 4px 14px rgba(59,42,29,0.10); }
+.detail-hero-img{ position: relative; border-radius: var(--radius); overflow: hidden; margin-bottom: 32px; box-shadow: 0 4px 14px rgba(59,42,29,0.10); }
 .detail-body{ background: var(--white); border-radius: var(--radius); padding: 32px; line-height: 1.8; box-shadow: 0 4px 14px rgba(59,42,29,0.10); }
 .detail-body p{ margin: 0 0 18px; }
 .detail-body h3{ font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.5px; color: var(--brown); }
@@ -133,6 +140,7 @@ body:has(.detail-page:target) #home{ display: none; }
           <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
           <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
         </svg>
+        <img class="photo-slot" src="photos/hero-cover.jpg" alt="封面照片" onerror="this.style.display='none'">
         <div class="hero-banner"><h1>The Traveling PEI</h1></div>
       </div>
       <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -156,6 +164,7 @@ body:has(.detail-page:target) #home{ display: none; }
             <!-- 點這張卡片會跳到下面 id="trip-singapore" 那個區塊 -->
             <a class="trip-card" href="#trip-singapore">
               <div class="trip-thumb">
+                <img class="photo-slot" src="photos/singapore-thumb.jpg" alt="Singapore 縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
                   <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
@@ -192,6 +201,7 @@ body:has(.detail-page:target) #home{ display: none; }
             ---------------------------------------------------------------- -->
             <a class="trip-card" href="#trip-next">
               <div class="trip-thumb">
+                <img class="photo-slot" src="photos/next-thumb.jpg" alt="縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
                   <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
@@ -235,6 +245,7 @@ body:has(.detail-page:target) #home{ display: none; }
         <p class="detail-meta">w/ 小畢 &amp; 曹小方 &nbsp;|&nbsp; 4 days &nbsp;|&nbsp; 2026</p>
 
         <div class="detail-hero-img">
+          <img class="photo-slot" src="photos/singapore-full.jpg" alt="Singapore 照片" onerror="this.style.display='none'">
           <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
             <rect width="1200" height="500" fill="url(#sky1)"/>
             <defs>
@@ -279,6 +290,7 @@ body:has(.detail-page:target) #home{ display: none; }
         <p class="detail-meta">w/ 旅伴姓名 &nbsp;|&nbsp; N days &nbsp;|&nbsp; 年份</p>
 
         <div class="detail-hero-img">
+          <img class="photo-slot" src="photos/next-full.jpg" alt="照片" onerror="this.style.display='none'">
           <svg viewBox="0 0 1200 500" xmlns="http://www.w3.org/2000/svg">
             <rect width="1200" height="500" fill="url(#sky2)"/>
             <defs>
