@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Traveling PEI — 旅遊紀錄</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- =========================================================
+       TOP BAR
+       這個檔案 travel.html 跟你的主網站 index.html 放在同一層
+       （就像 petanque.html 一樣），所以 HOME 直接連到 index.html。
+       ========================================================= -->
+  <header class="topbar">
+    <a href="index.html">Home</a>
+  </header>
+
+  <!-- =========================================================
+       HERO
+       ========================================================= -->
+  <section class="hero">
+    <div class="hero-sky">
+      <svg class="cloud" style="top:20px; left:8%; width:150px;" viewBox="0 0 150 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="45" cy="45" rx="45" ry="24" fill="#fff"/>
+        <ellipse cx="90" cy="30" rx="35" ry="30" fill="#fff"/>
+        <ellipse cx="110" cy="48" rx="30" ry="18" fill="#fff"/>
+      </svg>
+      <svg class="cloud" style="top:5px; left:38%; width:220px;" viewBox="0 0 220 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="70" cy="60" rx="65" ry="34" fill="#fff"/>
+        <ellipse cx="130" cy="40" rx="55" ry="42" fill="#fff"/>
+        <ellipse cx="165" cy="65" rx="45" ry="26" fill="#fff"/>
+      </svg>
+      <svg class="cloud" style="top:15px; right:4%; width:110px;" viewBox="0 0 110 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="35" cy="38" rx="35" ry="18" fill="#fff"/>
+        <ellipse cx="70" cy="25" rx="28" ry="22" fill="#fff"/>
+      </svg>
+
+      <div class="hero-banner">
+        <h1>The Traveling PEI</h1>
+      </div>
+    </div>
+
+    <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+      <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+    </svg>
+  </section>
+
+  <!-- =========================================================
+       TRAVEL LOG
+       ========================================================= -->
+  <section class="log-section">
+    <div class="log-inner">
+      <p class="eyebrow">Travel Log</p>
+      <h2 class="log-title">The Traveling PEI</h2>
+      <p class="log-subtitle">A collection of memories from around the world.</p>
+
+      <div class="timeline">
+        <div class="timeline-line"></div>
+        <div class="timeline-year">2026</div>
+
+        <div class="trip-list">
+
+          <!-- ---------- Trip card: Singapore ---------- -->
+          <a class="trip-card" href="trips/singapore.html">
+            <div class="trip-thumb">
+              <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
+                <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
+              </svg>
+              <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
+                <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
+              </svg>
+              <svg class="cloud" style="top:12px; right:6%; width:50px;" viewBox="0 0 50 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="16" cy="16" rx="16" ry="8" fill="#fff"/>
+                <ellipse cx="32" cy="10" rx="12" ry="10" fill="#fff"/>
+              </svg>
+              <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+                <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+              </svg>
+            </div>
+            <div class="trip-info">
+              <h2>Singapore</h2>
+              <p class="trip-meta">
+                <span>w/ 小畢 &amp; 曹小方</span>
+                <span class="divider">|</span>
+                <span>4 days</span>
+              </p>
+              <span class="read-more">read more</span>
+            </div>
+          </a>
+
+          <!-- ---------- Trip card template: 複製這個區塊來新增下一筆旅行紀錄 ---------- -->
+          <a class="trip-card" href="trips/_template.html">
+            <div class="trip-thumb">
+              <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="20" cy="22" rx="20" ry="11" fill="#fff"/>
+                <ellipse cx="42" cy="14" rx="16" ry="14" fill="#fff"/>
+              </svg>
+              <svg class="cloud" style="top:6px; left:42%; width:90px;" viewBox="0 0 90 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="26" cy="26" rx="26" ry="14" fill="#fff"/>
+                <ellipse cx="54" cy="16" rx="20" ry="17" fill="#fff"/>
+              </svg>
+              <svg class="hills" viewBox="0 0 1200 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,90 C200,40 350,140 550,90 C750,40 950,120 1200,60 L1200,220 L0,220 Z" fill="var(--hill-light)"/>
+                <path d="M0,140 C220,80 420,180 650,120 C880,60 1050,160 1200,110 L1200,220 L0,220 Z" fill="var(--hill-dark)"/>
+              </svg>
+            </div>
+            <div class="trip-info">
+              <h2>下一個目的地</h2>
+              <p class="trip-meta">
+                <span>w/ 旅伴姓名</span>
+                <span class="divider">|</span>
+                <span>N days</span>
+              </p>
+              <span class="read-more">read more</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
