@@ -339,10 +339,12 @@
     .entry{ flex-direction:column; padding-left:56px; }
     .entry-photo{ width:100%; flex:none; aspect-ratio:16/9; }
     .timeline-line{ left:calc(6vw + 20px); }
+    .entry-dot{ left:8px; }
   }
 
   @media (max-width:480px){
     .stats-left{ flex-direction:column; }
+    .stats-left .stat-card{ flex:none; min-height:0; }
     .stat-card{ padding:16px 20px; }
     #ballAge{ font-size:1.3rem; white-space:normal; }
     .stat-note{ white-space:normal; }
