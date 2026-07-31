@@ -350,12 +350,13 @@ body:has(.detail-page:target) #home{ display: none; }
               </div>
             </a>
 
-            <!-- ---------- 範本卡片：複製這個區塊來新增下一筆旅行紀錄 ----------
+            <!-- ---------- 範本卡片：要新增下一筆旅行紀錄時，把下面這整段的註解拿掉即可重新顯示
+                 （或直接複製這一整段貼到別的地方，改內容、改 href）
                  1. 把 href="#trip-next" 改成新的名字，例如 href="#trip-tokyo"
                  2. 往下複製一份 id="trip-next" 的 <div class="page detail-page">
                     區塊，把 id 也改成一樣的名字（例如 id="trip-tokyo"）
                  3. 把標題、meta、內文換成新的內容
-            ---------------------------------------------------------------- -->
+            ----------------------------------------------------------------
             <a class="trip-card" href="#trip-next">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/next-thumb.jpg" alt="縮圖照片" onerror="this.style.display='none'">
@@ -382,6 +383,7 @@ body:has(.detail-page:target) #home{ display: none; }
                 <span class="read-more">read more</span>
               </div>
             </a>
+            ---------------------------------------------------------------- -->
 
           </div>
         </div>
