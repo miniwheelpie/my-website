@@ -287,12 +287,12 @@ body:has(.detail-page:target) #home{ display: none; }
 
         <div class="timeline">
           <div class="timeline-line"></div>
-          <div class="timeline-year">2026</div>
+          <!-- 年份圓圈不用手動加了，會依照下面每張卡片的 data-year 自動產生（見檔案最下面的 script） -->
 
           <div class="trip-list">
 
             <!-- 點這張卡片會跳到下面 id="trip-singapore" 那個區塊 -->
-            <a class="trip-card" href="#trip-Kuala Lumpur ">
+            <a class="trip-card" href="#trip-Kuala Lumpur " data-year="2026">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/IMG_7383.JPG" alt="縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -319,7 +319,7 @@ body:has(.detail-page:target) #home{ display: none; }
               </div>
             </a>
 
-            <a class="trip-card" href="#trip-singapore">
+            <a class="trip-card" href="#trip-singapore" data-year="2026">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/IMG_7045.JPG" alt="Singapore 縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -350,7 +350,7 @@ body:has(.detail-page:target) #home{ display: none; }
               </div>
             </a>
 
-             <a class="trip-card" href="#trip-Kuala Lumpur">
+             <a class="trip-card" href="#trip-Kuala Lumpur" data-year="2026">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/IMG_9611.JPG" alt="縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -377,7 +377,7 @@ body:has(.detail-page:target) #home{ display: none; }
               </div>
             </a>
 
-            <a class="trip-card" href="#trip-Seoul">
+            <a class="trip-card" href="#trip-Seoul" data-year="2026">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/IMG_5730.JPG" alt="縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -407,11 +407,13 @@ body:has(.detail-page:target) #home{ display: none; }
             <!-- ---------- 範本卡片：要新增下一筆旅行紀錄時，把下面這整段的註解拿掉即可重新顯示
                  （或直接複製這一整段貼到別的地方，改內容、改 href）
                  1. 把 href="#trip-next" 改成新的名字，例如 href="#trip-tokyo"
-                 2. 往下複製一份 id="trip-next" 的 <div class="page detail-page">
+                 2. 把 data-year="2026" 改成這趟旅行實際的年份（例如 data-year="2025"）
+                    左側紅色圓圈的年份會依這個自動產生，不用手動加年份圓圈
+                 3. 往下複製一份 id="trip-next" 的 <div class="page detail-page">
                     區塊，把 id 也改成一樣的名字（例如 id="trip-tokyo"）
-                 3. 把標題、meta、內文換成新的內容
+                 4. 把標題、meta、內文換成新的內容
             ----------------------------------------------------------------
-            <a class="trip-card" href="#trip-next">
+            <a class="trip-card" href="#trip-next" data-year="2026">
               <div class="trip-thumb">
                 <img class="photo-slot" src="images/next-thumb.jpg" alt="縮圖照片" onerror="this.style.display='none'">
                 <svg class="cloud" style="top:10px; left:10%; width:70px;" viewBox="0 0 70 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1365,6 +1367,35 @@ body:has(.detail-page:target) #home{ display: none; }
       else if(e.key === 'ArrowLeft') lightboxStep(-1);
       else if(e.key === 'Escape') closeLightbox();
     });
+
+    // 自動依照每張卡片的 data-year 產生左側的年份圓圈
+    // 只要卡片有 data-year="xxxx"，同一年的卡片排在一起，
+    // 遇到年份跟前一張不一樣時，就會自動在那張卡片旁邊插入一個新的年份圓圈。
+    function renderTimelineYears(){
+      var timeline = document.querySelector('.timeline');
+      if(!timeline) return;
+      var list = timeline.querySelector('.trip-list');
+      if(!list) return;
+
+      // 先清掉舊的圓圈，避免重複產生
+      timeline.querySelectorAll('.timeline-year').forEach(function(el){ el.remove(); });
+
+      var cards = list.querySelectorAll('.trip-card[data-year]');
+      var lastYear = null;
+      cards.forEach(function(card){
+        var year = card.getAttribute('data-year');
+        if(year && year !== lastYear){
+          var badge = document.createElement('div');
+          badge.className = 'timeline-year';
+          badge.textContent = year;
+          badge.style.top = card.offsetTop + 'px';
+          timeline.appendChild(badge);
+          lastYear = year;
+        }
+      });
+    }
+    window.addEventListener('load', renderTimelineYears);
+    window.addEventListener('resize', renderTimelineYears);
   </script>
 
 </body>
