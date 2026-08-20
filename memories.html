@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>創建中...</title>
+<style>
+  :root {
+    --milk: #f4ece1;       /* 奶茶奶泡 */
+    --cream: #ece0cd;      /* 奶油底 */
+    --latte: #a9866b;      /* 拿鐵主色 */
+    --cocoa: #6b4f3b;      /* 可可深字 */
+    --taupe: #9c8a76;      /* 灰霧字 */
+    --matcha: #8a9a7e;     /* 抹茶點綴 */
+    --line: #d9c8b0;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(255,255,255,0.5), transparent 55%),
+      linear-gradient(160deg, var(--milk) 0%, var(--cream) 100%);
+    color: var(--cocoa);
+    font-family: "Noto Serif TC", "Zen Old Mincho", "PingFang TC", "Microsoft JhengHei", serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* 淺淺的紙纖維紋理感 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(rgba(107,79,59,0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events: none;
+  }
+
+  .stage {
+    position: relative;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .mark {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    margin-bottom: 1.75rem;
+  }
+
+  .kanji {
+    font-size: 0.85rem;
+    letter-spacing: 0.5em;
+    color: var(--matcha);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-weight: 500;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    letter-spacing: 0.15em;
+    margin: 0 0 0.75rem 0;
+    color: var(--cocoa);
+  }
+
+  h1 .dots::after {
+    content: '';
+    display: inline-block;
+    width: 1.4em;
+    text-align: left;
+    animation: dots 1.8s steps(4, end) infinite;
+  }
+
+  @keyframes dots {
+    0%   { content: ''; }
+    25%  { content: '．'; }
+    50%  { content: '．．'; }
+    75%  { content: '．．．'; }
+    100% { content: ''; }
+  }
+
+  .sub {
+    font-family: "Noto Sans TC", sans-serif;
+    color: var(--taupe);
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    margin-top: 0.5rem;
+  }
+
+  .rule {
+    width: 1px;
+    height: 40px;
+    background: var(--line);
+    margin: 2rem auto;
+  }
+
+  .cup {
+    width: 30px;
+    height: 30px;
+    margin: 0 auto 0.5rem;
+    opacity: 0.85;
+  }
+
+  .back {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: "Noto Sans TC", sans-serif;
+    color: var(--taupe);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .back:hover {
+    color: var(--cocoa);
+    border-color: var(--latte);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    h1 .dots::after { animation: none; content: '．．．'; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="stage">
+    <svg class="cup" viewBox="0 0 24 24" fill="none" stroke="#a9866b" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 8h15v6a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8z"/>
+      <path d="M18 9h1.5a2.5 2.5 0 0 1 0 5H18"/>
+      <path d="M7 3c0 1-1 1-1 2s1 1 1 2"/>
+      <path d="M11 3c0 1-1 1-1 2s1 1 1 2"/>
+    </svg>
+    <div class="mark">this page</div>
+    <div class="kanji">準備中</div>
+    <h1>創建中<span class="dots"></span></h1>
+    <p class="sub">內容正在慢慢醞釀，敬請期待。</p>
+    <div class="rule"></div>
+    <a class="back" href="../index.html">← 回到首頁</a>
+  </div>
+
+</body>
+</html>
