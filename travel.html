@@ -1394,7 +1394,7 @@ body:has(.detail-page:target) #home{ display: none; }
         }
       });
     }
-    window.addEventListener('load', renderTimelineYears);
+    renderTimelineYears(); // 直接執行，不用等所有照片載入完成
     window.addEventListener('resize', renderTimelineYears);
   </script>
 
