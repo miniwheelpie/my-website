@@ -151,10 +151,12 @@
     font-size:2.3rem;
     font-weight:900;
     color:var(--brown);
+    height:2.5rem;
+    display:flex;
+    align-items:center;
   }
 
   #ballAge{
-    font-size:1.5rem;
     white-space:nowrap;
   }
 
@@ -163,6 +165,7 @@
     font-weight:400;
     color:var(--brown-soft);
     margin-left:6px;
+    vertical-align:middle;
   }
 
   .stat-note{
@@ -427,13 +430,14 @@
       <div class="stat-label">球齡</div>
       <div class="stat-body">
         <div class="stat-value" id="ballAge">計算中...</div>
+        <div class="stat-note" id="ballAgeDays">累積0天</div>
       </div>
     </div>
 
     <div class="stat-card">
       <div class="stat-label">參賽次數</div>
       <div class="stat-body">
-        <div class="stat-value" id="matchCount">–</div>
+        <div class="stat-value"><span id="matchCountNum">0</span><span class="stat-sub">場</span></div>
         <div class="stat-note">包含個人/雙人/三人/射擊賽</div>
       </div>
     </div>
@@ -1038,6 +1042,11 @@ const matchRecords = [
 /* =========================================================
    2) 球齡計算：從 2021/10/29 開始，即時算出 x年x月x天
    ========================================================= */
+// 把「年、月、天」這三個單位字，套用跟參賽次數「場」一樣的樣式（.stat-sub）
+function buildBallAgeHtml(years, months, days){
+  return `${years}<span class="stat-sub">年</span>${months}<span class="stat-sub">月</span>${days}<span class="stat-sub">天</span>`;
+}
+
 function calcBallAge(startDateStr){
   const start = new Date(startDateStr);
   const now = new Date();
@@ -1055,16 +1064,29 @@ function calcBallAge(startDateStr){
     years -= 1;
     months += 12;
   }
-  return `${years}年${months}月${days}天`;
+  return buildBallAgeHtml(years, months, days);
 }
 
-document.getElementById("ballAge").textContent = calcBallAge("2021-10-29");
+// 從起始日到今天總共累積幾天（用來顯示「累積XXX天」，也用來做捲動數字動畫）
+function calcTotalDays(startDateStr){
+  const start = new Date(startDateStr);
+  const now = new Date();
+  const msPerDay = 1000 * 60 * 60 * 24;
+  return Math.floor((now - start) / msPerDay);
+}
+
+const ballAgeText = calcBallAge("2021-10-29");
+const totalBallDays = calcTotalDays("2021-10-29");
+
+// 先不直接顯示最終數字，等捲動到這個區塊時才播放動畫
+document.getElementById("ballAge").innerHTML = buildBallAgeHtml(0, 0, 0);
+document.getElementById("ballAgeDays").textContent = "累積0天";
 
 /* =========================================================
    3) 參賽次數：直接讀取 matchRecords 筆數
    ========================================================= */
-document.getElementById("matchCount").innerHTML =
-  `${matchRecords.length}<span class="stat-sub">場</span>`;
+const totalMatchCount = matchRecords.length;
+// 同樣先顯示 0，等捲動到這個區塊時才播放數字動畫
 
 /* =========================================================
    4) 榮譽榜：統計每個名次出現次數，沒出現過就留白
@@ -1084,11 +1106,105 @@ honorOrder.forEach(key => {
   const item = document.createElement("div");
   item.className = "honor-item";
   item.innerHTML = `
-    <div class="honor-circle ${count === 0 ? 'empty' : ''}">${count === 0 ? '' : count}</div>
+    <div class="honor-circle ${count === 0 ? 'empty' : ''}" data-target="${count}">${count === 0 ? '' : '0'}</div>
     <div class="honor-name">${key}</div>
   `;
   honorGrid.appendChild(item);
 });
+
+/* =========================================================
+   4-1) 捲動到「球齡／參賽次數／榮譽榜」區塊時，播放數字捲動計算動畫
+   ========================================================= */
+function animateNumber(el, endValue, duration, formatFn){
+  const start = performance.now();
+  function tick(now){
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic，動畫後段會慢下來比較自然
+    const current = Math.round(endValue * eased);
+    el.textContent = formatFn ? formatFn(current) : current;
+    if(progress < 1){
+      requestAnimationFrame(tick);
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+// 把「從起始日算起、經過了幾天」換算成「x年x月x天」的格式，
+// 用來讓球齡的年月日文字可以跟著累積天數一起捲動，而不是動畫結束才突然跳出來
+function formatBallAgeFromDays(startDateStr, days){
+  const start = new Date(startDateStr);
+  const current = new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+
+  let years = current.getFullYear() - start.getFullYear();
+  let months = current.getMonth() - start.getMonth();
+  let d = current.getDate() - start.getDate();
+
+  if(d < 0){
+    months -= 1;
+    const prevMonth = new Date(current.getFullYear(), current.getMonth(), 0);
+    d += prevMonth.getDate();
+  }
+  if(months < 0){
+    years -= 1;
+    months += 12;
+  }
+  return buildBallAgeHtml(years, months, d);
+}
+
+// 球齡跟累積天數用同一個動畫進度來驅動，兩行文字會同步捲動，
+// 動畫結束那一刻直接套用最精準算好的 ballAgeText / totalBallDays，避免動畫誤差
+function animateBallAge(duration){
+  const ballAgeEl = document.getElementById("ballAge");
+  const ballAgeDaysEl = document.getElementById("ballAgeDays");
+  const start = performance.now();
+
+  function tick(now){
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+
+    if(progress < 1){
+      const currentDays = Math.round(totalBallDays * eased);
+      ballAgeDaysEl.textContent = `累積${currentDays}天`;
+      ballAgeEl.innerHTML = formatBallAgeFromDays("2021-10-29", currentDays);
+      requestAnimationFrame(tick);
+    } else {
+      // 動畫跑完，直接顯示最終精確結果
+      ballAgeDaysEl.textContent = `累積${totalBallDays}天`;
+      ballAgeEl.innerHTML = ballAgeText;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function playStatsAnimation(){
+  // 球齡：年月日文字跟累積天數同步捲動
+  animateBallAge(1200);
+
+  // 參賽次數
+  const matchCountEl = document.getElementById("matchCountNum");
+  animateNumber(matchCountEl, totalMatchCount, 1000);
+
+  // 榮譽榜：每個圓圈有數字的才動畫，留白的不用
+  document.querySelectorAll(".honor-circle").forEach(circle => {
+    const target = parseInt(circle.dataset.target, 10);
+    if(target > 0){
+      animateNumber(circle, target, 900);
+    }
+  });
+}
+
+const statsSection = document.querySelector(".stats-section");
+if(statsSection){
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        playStatsAnimation();
+        statsObserver.unobserve(entry.target); // 只播放一次，之後捲上捲下不會重複觸發
+      }
+    });
+  }, { threshold: 0.4 });
+  statsObserver.observe(statsSection);
+}
 
 /* =========================================================
    5) 時間軸：依年份分組來決定底色（不在畫面上顯示年份文字）
