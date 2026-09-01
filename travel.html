@@ -64,7 +64,7 @@ body:has(.detail-page:target) #home{ display: none; }
 
 /* ---------- Travel log section ---------- */
 .log-section{ background: var(--yellow); padding: 56px 24px 80px; }
-.log-inner{ max-width: var(--max-width); margin: 0 auto; }
+.log-inner{ max-width: 1100px; margin: 0 auto; }
 .eyebrow{ font-weight: 700; letter-spacing: 2px; font-size: 0.8rem; text-transform: uppercase; color: var(--brown); margin: 0 0 8px; }
 .log-title{ font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 7vw, 3rem); margin: 0 0 12px; color: var(--brown); line-height: 1.05; }
 .log-subtitle{ font-size: 0.85rem; font-weight: 500; color: var(--brown-soft); margin: 0 0 48px; }
@@ -73,7 +73,7 @@ body:has(.detail-page:target) #home{ display: none; }
 .timeline{ position: relative; padding-left: 70px; }
 .timeline-year{ position: absolute; left: 0; top: 0; width: 62px; height: 62px; border-radius: 50%; background: var(--red); color: var(--white); font-family: var(--font-display); font-size: 1.15rem; display: flex; align-items: center; justify-content: center; z-index: 2; box-shadow: 0 4px 0 rgba(0,0,0,0.08); }
 .timeline-line{ position: absolute; left: 31px; top: 0; bottom: 0; width: 2px; background: var(--red); opacity: 0.55; }
-.trip-list{ display: flex; flex-direction: column; gap: 40px; }
+.trip-list{ display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
 /* ---------- Trip card ---------- */
 .trip-card{ display: block; background: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 14px rgba(59,42,29,0.10); transition: transform .18s ease, box-shadow .18s ease; }
@@ -206,6 +206,7 @@ body:has(.detail-page:target) #home{ display: none; }
 .back-to-top:hover{ background: var(--red-dark); }
 @media (max-width: 480px){
   .back-to-top{ right: 16px; bottom: 16px; width: 42px; height: 42px; font-size: 1.1rem; }
+  .trip-list{ grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px){
